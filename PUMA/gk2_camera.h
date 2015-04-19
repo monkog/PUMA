@@ -9,10 +9,9 @@ namespace gk2
 	class Camera
 	{
 	public:
-		Camera(float minDistance, float maxDistance, float distance =  0.0f);
+		Camera();
 
-		void SetRange(float minDistance, float maxDistance);
-		void Zoom(float d);
+		void Move(float x, float y);
 		void Rotate(float dx, float dy);
 		XMMATRIX GetViewMatrix();
 		void GetViewMatrix(XMMATRIX& viewMatrix);
@@ -22,10 +21,8 @@ namespace gk2
 		float m_angleX;
 		float m_angleY;
 		float m_distance;
-		float m_minDistance;
-		float m_maxDistance;
-
-		void ClampDistance();
+		float m_xPos;
+		float m_yPos;
 	};
 }
 

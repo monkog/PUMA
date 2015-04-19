@@ -74,7 +74,7 @@ namespace gk2
 		void UpdateCamera();
 
 		void DrawScene();
-		void DrawWalls();
+		void DrawFloor();
 		void DrawRobot();
 		void DrawTransparentObjects();
 

@@ -9,7 +9,7 @@ const XMFLOAT4 Scene::LIGHT_POS[2] = { XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT
 const unsigned int Scene::BS_MASK = 0xffffffff;
 
 Scene::Scene(HINSTANCE hInstance)
-	: ApplicationBase(hInstance), m_camera(0.01f, 100.0f)
+	: ApplicationBase(hInstance), m_camera()
 {
 
 }
@@ -46,7 +46,6 @@ void Scene::InitializeCamera()
 	float ar = static_cast<float>(s.cx) / s.cy;
 	m_projMtx = XMMatrixPerspectiveFovLH(XM_PIDIV4, ar, 0.01f, 100.0f);
 	m_projCB->Update(m_context, m_projMtx);
-	m_camera.Zoom(5);
 	UpdateCamera();
 }
 
@@ -194,7 +193,7 @@ void Scene::Update(float dt)
 		else if (prevState.isButtonDown(1))
 		{
 			POINT d = currentState.getMousePositionChange();
-			m_camera.Zoom(d.y / 10.0f);
+			m_camera.Move(d.x / 10.0f, d.y / 10.0f);
 		}
 		else
 			change = false;
@@ -205,7 +204,7 @@ void Scene::Update(float dt)
 	m_particles->Update(m_context, dt, m_camera.GetPosition());
 }
 
-void Scene::DrawWalls()
+void Scene::DrawFloor()
 {
 	//Draw floor
 	m_textureCB->Update(m_context, XMMatrixScaling(0.25f, 4.0f, 1.0f) * XMMatrixTranslation(0.5f, 0.5f, 0.0f));
@@ -232,7 +231,7 @@ void Scene::DrawTransparentObjects()
 void Scene::DrawScene()
 {
 
-	DrawWalls();
+	DrawFloor();
 	m_phongEffect->Begin(m_context);
 	DrawRobot();
 	m_phongEffect->End();
