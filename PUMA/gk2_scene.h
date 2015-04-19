@@ -35,6 +35,7 @@ namespace gk2
 		static const unsigned int BS_MASK;
 
 		gk2::Mesh m_floor;
+		gk2::Mesh m_metal;
 		gk2::Mesh m_robot[6];
 
 		XMMATRIX m_projMtx;
@@ -74,7 +75,7 @@ namespace gk2
 		void UpdateCamera();
 
 		void DrawScene();
-		void DrawFloor();
+		void DrawQuads();
 		void DrawRobot();
 		void DrawTransparentObjects();
 

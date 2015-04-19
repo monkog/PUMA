@@ -92,8 +92,11 @@ void Scene::InitializeTextures()
 void Scene::CreateScene()
 {
 	m_floor = m_meshLoader.GetQuad(4.0f);
-	float a = 0;
 	m_floor.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2));
+
+	m_metal = m_meshLoader.GetQuad(1.0f);
+	m_metal.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2 / 3));
+
 	m_lightPosCB->Update(m_context, LIGHT_POS);
 
 	m_robot[0] = m_meshLoader.LoadMesh(L"resources/meshes/mesh1.txt");
@@ -204,7 +207,7 @@ void Scene::Update(float dt)
 	m_particles->Update(m_context, dt, m_camera.GetPosition());
 }
 
-void Scene::DrawFloor()
+void Scene::DrawQuads()
 {
 	//Draw floor
 	m_textureCB->Update(m_context, XMMatrixScaling(0.25f, 4.0f, 1.0f) * XMMatrixTranslation(0.5f, 0.5f, 0.0f));
@@ -212,6 +215,8 @@ void Scene::DrawFloor()
 	m_textureEffect->Begin(m_context);
 	m_worldCB->Update(m_context, m_floor.getWorldMatrix());
 	m_floor.Render(m_context);
+	m_worldCB->Update(m_context, m_metal.getWorldMatrix());
+	m_metal.Render(m_context);
 	m_textureEffect->End();
 }
 
@@ -230,8 +235,7 @@ void Scene::DrawTransparentObjects()
 
 void Scene::DrawScene()
 {
-
-	DrawFloor();
+	DrawQuads();
 	m_phongEffect->Begin(m_context);
 	DrawRobot();
 	m_phongEffect->End();
