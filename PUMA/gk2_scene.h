@@ -35,6 +35,7 @@ namespace gk2
 		static const unsigned int BS_MASK;
 
 		gk2::Mesh m_floor;
+		gk2::Mesh m_robot[6];
 
 		XMMATRIX m_projMtx;
 
@@ -74,7 +75,10 @@ namespace gk2
 
 		void DrawScene();
 		void DrawWalls();
+		void DrawRobot();
 		void DrawTransparentObjects();
+
+		//void inverse_kinematics(vector3 pos, vector3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);
 	};
 }
 

@@ -232,20 +232,27 @@ Mesh MeshLoader::LoadMesh(const wstring& fileName)
 																//exceptions in case of eof, but here if end of file was
 																//reached before the whole mesh was loaded, we would
 																//have had to throw an exception anyway.
-	int n, in;
+	int n, in, m, index;
 	input.open(fileName);
-	input >> n >> in;
-	vector<VertexPosNormal> vertices(n);
-	XMFLOAT2 texDummy;
+	input >> n;
+	vector<VertexPosNormal> vert(n);
 	for (int i = 0; i < n; ++ i)
-	{
-		input >> vertices[i].Pos.x >> vertices[i].Pos.y >> vertices[i].Pos.z;
-		input >> vertices[i].Normal.x >> vertices[i].Normal.y >> vertices[i].Normal.z;
-		input >> texDummy.x >> texDummy.y;
-	}
-	vector<unsigned short> indices(in);
+		input >> vert[i].Pos.x >> vert[i].Pos.y >> vert[i].Pos.z;
+
+	input >> in;
+	vector<VertexPosNormal> vertices(in);
 	for (int i = 0; i < in; ++i)
+	{
+		input >> index;
+		vertices[i].Pos = vert[index].Pos;
+		input >> vertices[i].Normal.x >> vertices[i].Normal.y >> vertices[i].Normal.z;
+	}
+
+	input >> m;
+	vector<unsigned short> indices(m);
+	for (int i = 0; i < m; ++i)
 		input >> indices[i];
+
 	input.close();
 	return Mesh(m_device.CreateVertexBuffer(vertices), sizeof(VertexPosNormal),
 				m_device.CreateIndexBuffer(indices), in);
