@@ -2,35 +2,17 @@
 
 using namespace gk2;
 
-Camera::Camera(float minDistance, float maxDistance, float distance)
+Camera::Camera(float distance)
 	: m_angleX(0.0f), m_angleY(0.0f), m_distance(distance)
 {
-	SetRange(minDistance, maxDistance);
+	m_xPos = 0;
+	m_yPos = 0;
 }
 
-void Camera::ClampDistance()
+void Camera::Move(float x, float y)
 {
-	if (m_distance < m_minDistance)
-		m_distance = m_minDistance;
-	if (m_distance > m_maxDistance)
-		m_distance = m_maxDistance;
-}
-
-void Camera::SetRange(float minDistance, float maxDistance)
-{
-	if (minDistance < 0)
-		minDistance = 0;
-	if (maxDistance < minDistance)
-		maxDistance = minDistance;
-	m_minDistance = minDistance;
-	m_maxDistance = maxDistance;
-	ClampDistance();
-}
-
-void Camera::Zoom(float d)
-{
-	m_distance += d;
-	ClampDistance();
+	m_xPos -= x / 10.0f;
+	m_yPos += y / 10.0f;
 }
 
 void Camera::Rotate(float dx, float dy)
@@ -48,7 +30,7 @@ XMMATRIX Camera::GetViewMatrix()
 
 void Camera::GetViewMatrix(XMMATRIX& viewMtx)
 {
-	viewMtx = XMMatrixRotationX(m_angleX) * XMMatrixRotationY(-m_angleY) * XMMatrixTranslation(0.0f, 0.0f, m_distance);
+	viewMtx = XMMatrixRotationX(m_angleX) * XMMatrixRotationY(-m_angleY) * XMMatrixTranslation(m_xPos, m_yPos, m_distance);
 }
 
 XMFLOAT4 Camera::GetPosition()
@@ -57,8 +39,8 @@ XMFLOAT4 Camera::GetPosition()
 	GetViewMatrix(viewMtx);
 	XMVECTOR det;
 	viewMtx = XMMatrixInverse(&det, viewMtx);
-	XMMATRIX alt = XMMatrixTranslation(0.0f, 0.0f, -m_distance) * XMMatrixRotationY(m_angleY) * XMMatrixRotationX(-m_angleX);
-	XMFLOAT3 res(0.0f, 0.0f, 0.0f);
+	XMMATRIX alt = XMMatrixTranslation(m_xPos, m_yPos, m_distance) * XMMatrixRotationY(m_angleY) * XMMatrixRotationX(-m_angleX);
+	XMFLOAT3 res(0.0f, -1.0f, 0.0f);
 	XMVECTOR transl = XMVector3TransformCoord(XMLoadFloat3(&res), viewMtx);
 	XMStoreFloat3(&res, transl);
 	return XMFLOAT4(res.x, res.y, res.z, 1.0f);
