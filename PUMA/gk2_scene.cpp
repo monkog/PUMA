@@ -9,7 +9,7 @@ const XMFLOAT4 Scene::LIGHT_POS[2] = { XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT
 const unsigned int Scene::BS_MASK = 0xffffffff;
 
 Scene::Scene(HINSTANCE hInstance)
-	: ApplicationBase(hInstance), m_camera()
+	: ApplicationBase(hInstance), m_camera(0.01f, 100.0f)
 {
 
 }
@@ -46,12 +46,13 @@ void Scene::InitializeCamera()
 	float ar = static_cast<float>(s.cx) / s.cy;
 	m_projMtx = XMMatrixPerspectiveFovLH(XM_PIDIV4, ar, 0.01f, 100.0f);
 	m_projCB->Update(m_context, m_projMtx);
+	m_camera.Zoom(5);
 	UpdateCamera();
 }
 
 void Scene::InitializeTextures()
 {
-	m_floorTexture = m_device.CreateShaderResourceView(L"resources/textures/metal_floor.jpg");
+	m_floorTexture = m_device.CreateShaderResourceView(L"resources/textures/brick_wall.jpg");
 
 	D3D11_SAMPLER_DESC sd = m_device.DefaultSamplerDesc();
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -193,7 +194,7 @@ void Scene::Update(float dt)
 		else if (prevState.isButtonDown(1))
 		{
 			POINT d = currentState.getMousePositionChange();
-			m_camera.Move(d.x / 10.0f, d.y / 10.0f);
+			m_camera.Zoom(d.y / 10.0f);
 		}
 		else
 			change = false;
