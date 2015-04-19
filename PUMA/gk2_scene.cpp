@@ -51,7 +51,7 @@ void Scene::InitializeCamera()
 
 void Scene::InitializeTextures()
 {
-	m_floorTexture = m_device.CreateShaderResourceView(L"resources/textures/brick_wall.jpg");
+	m_floorTexture = m_device.CreateShaderResourceView(L"resources/textures/metal_texture.jpg");
 
 	D3D11_SAMPLER_DESC sd = m_device.DefaultSamplerDesc();
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
