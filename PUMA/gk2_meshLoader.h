@@ -14,10 +14,6 @@ namespace gk2
 		const gk2::DeviceHelper& getDevice() const { return m_device; }
 		void setDevice(const gk2::DeviceHelper& device) { m_device = device; }
 
-		gk2::Mesh GetSphere(int stacks, int slices, float radius = 0.5f);
-		gk2::Mesh GetCylinder(int stacks, int slices, float radius = 0.5f, float height = 1.0f);
-		gk2::Mesh GetDisc(int slices, float radius = 0.5f);
-		gk2::Mesh GetBox(float side = 1.0f);
 		gk2::Mesh GetQuad(float side = 1.0f);
 		gk2::Mesh LoadMesh(const std::wstring& fileName);
 
