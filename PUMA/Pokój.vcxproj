@@ -129,7 +129,6 @@
     <ClCompile Include="gk2_colorTexEffect.cpp" />
     <ClCompile Include="gk2_effectBase.cpp" />
     <ClCompile Include="gk2_environmentMapper.cpp" />
-    <ClCompile Include="gk2_multiTexEffect.cpp" />
     <ClCompile Include="gk2_particles.cpp" />
     <ClCompile Include="gk2_phongEffect.cpp" />
     <ClCompile Include="gk2_camera.cpp" />
@@ -141,7 +140,6 @@
     <ClCompile Include="gk2_meshLoader.cpp" />
     <ClCompile Include="gk2_scene.cpp" />
     <ClCompile Include="gk2_textureEffect.cpp" />
-    <ClCompile Include="gk2_textureGenerator.cpp" />
     <ClCompile Include="gk2_utils.cpp" />
     <ClCompile Include="gk2_vertices.cpp" />
     <ClCompile Include="gk2_window.cpp" />
@@ -164,7 +162,6 @@
     <ClInclude Include="gk2_meshLoader.h" />
     <ClInclude Include="gk2_scene.h" />
     <ClInclude Include="gk2_textureEffect.h" />
-    <ClInclude Include="gk2_textureGenerator.h" />
     <ClInclude Include="gk2_utils.h" />
     <ClInclude Include="gk2_vertices.h" />
     <ClInclude Include="gk2_window.h" />
@@ -178,7 +175,6 @@
     <None Include="resources\meshes\teapot.mesh" />
     <None Include="resources\shaders\ColorTexShader.hlsl" />
     <None Include="resources\shaders\EnvMapShader.hlsl" />
-    <None Include="resources\shaders\MultiTexShader.hlsl" />
     <None Include="resources\shaders\Particles.hlsl" />
     <None Include="resources\shaders\PhongShader.hlsl" />
     <None Include="resources\shaders\TextureShader.hlsl" />

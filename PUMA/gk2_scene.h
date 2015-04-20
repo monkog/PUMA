@@ -77,7 +77,7 @@ namespace gk2
 		void DrawScene();
 		void DrawQuads();
 		void DrawRobot();
-		void DrawTransparentObjects();
+		void DrawMetal();
 
 		//void inverse_kinematics(vector3 pos, vector3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);
 	};

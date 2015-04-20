@@ -8,7 +8,7 @@ Camera::Camera()
 
 void Camera::Move(float x, float y)
 {
-	m_xPos += x / 10.0f;
+	m_xPos -= x / 10.0f;
 	m_yPos += y / 10.0f;
 }
 

@@ -1,6 +1,5 @@
 #include "gk2_scene.h"
 #include "gk2_window.h"
-#include "gk2_textureGenerator.h"
 
 using namespace std;
 using namespace gk2;
@@ -54,39 +53,12 @@ void Scene::InitializeTextures()
 	m_floorTexture = m_device.CreateShaderResourceView(L"resources/textures/metal_texture.jpg");
 
 	D3D11_SAMPLER_DESC sd = m_device.DefaultSamplerDesc();
-	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
 	m_samplerWrap = m_device.CreateSamplerState(sd);
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
 	m_samplerBorder = m_device.CreateSamplerState(sd);
-
-	D3D11_TEXTURE2D_DESC texDesc = m_device.DefaultTexture2DDesc();
-	texDesc.Width = 64;
-	texDesc.Height = 512;
-	texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-	texDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
-	shared_ptr<ID3D11Texture2D> woodTexture = m_device.CreateTexture2D(texDesc);
-	shared_ptr<BYTE> data(new BYTE[64 * 512 * 4], Utils::DeleteArray<BYTE>);
-	BYTE *d = data.get();
-	TextureGenerator txGen(6, 0.35f);
-	for (int i = 0; i < 512; ++i)
-	{
-		float x = i / 512.0f;
-		for (int j = 0; j < 64; ++j)
-		{
-			float y = j / 64.0f;
-			float c = txGen.Wood(x, y);
-			BYTE ic = static_cast<BYTE>(c * 239);
-			*(d++) = ic;
-			ic = static_cast<BYTE>(c * 200);
-			*(d++) = ic;
-			ic = static_cast<BYTE>(c * 139);
-			*(d++) = ic;
-			*(d++) = 255;
-		}
-	}
-	m_context->UpdateSubresource(woodTexture.get(), 0, 0, data.get(), 64 * 4, 64 * 512 * 4);
 }
 
 void Scene::CreateScene()
@@ -95,7 +67,7 @@ void Scene::CreateScene()
 	m_floor.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2));
 
 	m_metal = m_meshLoader.GetQuad(1.0f);
-	m_metal.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2 / 3));
+	m_metal.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(-XM_PIDIV2 / 3));
 
 	m_lightPosCB->Update(m_context, LIGHT_POS);
 
@@ -215,8 +187,6 @@ void Scene::DrawQuads()
 	m_textureEffect->Begin(m_context);
 	m_worldCB->Update(m_context, m_floor.getWorldMatrix());
 	m_floor.Render(m_context);
-	m_worldCB->Update(m_context, m_metal.getWorldMatrix());
-	m_metal.Render(m_context);
 	m_textureEffect->End();
 }
 
@@ -229,17 +199,25 @@ void Scene::DrawRobot()
 	}
 }
 
-void Scene::DrawTransparentObjects()
+void Scene::DrawMetal()
 {
+	m_environmentMapper->Begin(m_context);
+	m_surfaceColorCB->Update(m_context, XMFLOAT4(0.8f, 0.7f, 0.65f, 1.0f));
+
+	m_worldCB->Update(m_context, m_metal.getWorldMatrix());
+	m_metal.Render(m_context);
+
+	m_surfaceColorCB->Update(m_context, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_environmentMapper->End();
 }
 
 void Scene::DrawScene()
 {
 	DrawQuads();
+	DrawMetal();
 	m_phongEffect->Begin(m_context);
 	DrawRobot();
 	m_phongEffect->End();
-	DrawTransparentObjects();
 }
 
 void Scene::Render()
@@ -247,7 +225,6 @@ void Scene::Render()
 	if (m_context == nullptr)
 		return;
 
-	//TODO: Render scene to each environment cube map face
 	for (int i = 0; i < 6; i++)
 	{
 		m_environmentMapper->SetupFace(m_context, static_cast<D3D11_TEXTURECUBE_FACE>(i));
