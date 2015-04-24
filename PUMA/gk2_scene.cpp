@@ -67,7 +67,7 @@ void Scene::CreateScene()
 	m_floor.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2));
 
 	m_metal = m_meshLoader.GetQuad(1.0f);
-	m_metal.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(-XM_PIDIV2 / 3));
+	m_metal.setWorldMatrix(XMMatrixTranslation(0.0f, 0.0f, 2.0f) * XMMatrixRotationX(XM_PIDIV2 / 3));
 
 	m_lightPosCB->Update(m_context, LIGHT_POS);
 
@@ -86,6 +86,7 @@ void Scene::InitializeRenderStates()
 {
 	D3D11_RASTERIZER_DESC rsDesc = m_device.DefaultRasterizerDesc();
 	rsDesc.CullMode = D3D11_CULL_FRONT;
+	rsDesc.FrontCounterClockwise = true;
 	m_rsCullFront = m_device.CreateRasterizerState(rsDesc);
 
 	D3D11_BLEND_DESC bsDesc = m_device.DefaultBlendDesc();
@@ -192,6 +193,7 @@ void Scene::DrawQuads()
 
 void Scene::DrawRobot()
 {
+	m_context->RSSetState(m_rsCullFront.get());
 	for (int i = 0; i < 6; ++i)
 	{
 		m_worldCB->Update(m_context, m_robot[i].getWorldMatrix());

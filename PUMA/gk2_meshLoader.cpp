@@ -44,11 +44,11 @@ Mesh MeshLoader::LoadMesh(const wstring& fileName)
 	}
 
 	input >> m;
-	vector<unsigned short> indices(m);
+	vector<unsigned short> indices(3*m);
 	for (int i = 0; i < m; ++i)
-		input >> indices[i];
+		input >> indices[3*i] >> indices[3*i + 1] >> indices[3*i + 2];
 
 	input.close();
 	return Mesh(m_device.CreateVertexBuffer(vertices), sizeof(VertexPosNormal),
-		m_device.CreateIndexBuffer(indices), in);
+		m_device.CreateIndexBuffer(indices), 3*m);
 }
