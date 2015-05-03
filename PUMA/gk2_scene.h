@@ -1,6 +1,7 @@
 #ifndef __GK2_ROOM_H_
 #define __GK2_ROOM_H_
 
+#include "mtxlib.h"
 #include "gk2_applicationBase.h"
 #include "gk2_meshLoader.h"
 #include "gk2_camera.h"
@@ -31,15 +32,16 @@ namespace gk2
 		virtual void Render();
 
 	private:
-		static const XMFLOAT4 LIGHT_POS[2];
+		static const XMFLOAT4 LIGHT_POS;
 		static const unsigned int BS_MASK;
 
+		gk2::Mesh m_circle;
 		gk2::Mesh m_floor;
 		gk2::Mesh m_metal;
 		gk2::Mesh m_robot[6];
 
 		XMMATRIX m_projMtx;
-
+		XMMATRIX m_robotRotationMatrix[6];
 		gk2::Camera m_camera;
 		gk2::MeshLoader m_meshLoader;
 
@@ -54,6 +56,7 @@ namespace gk2
 		std::shared_ptr<ID3D11SamplerState> m_samplerWrap;
 		std::shared_ptr<ID3D11SamplerState> m_samplerBorder;
 		std::shared_ptr<ID3D11ShaderResourceView> m_floorTexture;
+		std::shared_ptr<ID3D11ShaderResourceView> m_metalTexture;
 
 		std::shared_ptr<gk2::PhongEffect> m_phongEffect;
 		std::shared_ptr<gk2::TextureEffect> m_textureEffect;
@@ -65,21 +68,29 @@ namespace gk2
 
 		std::shared_ptr<ID3D11RasterizerState> m_rsCullFront;
 		std::shared_ptr<ID3D11BlendState> m_bsAlpha;
+		std::shared_ptr<ID3D11DepthStencilState> m_dssWrite;
 		std::shared_ptr<ID3D11DepthStencilState> m_dssNoWrite;
+		std::shared_ptr<ID3D11DepthStencilState> m_dssTest;
+		std::shared_ptr<ID3D11BlendState> m_bsAdd;
 
 		void InitializeConstantBuffers();
 		void InitializeTextures();
 		void InitializeCamera();
 		void InitializeRenderStates();
 		void CreateScene();
-		void UpdateCamera();
+		void UpdateCamera(XMMATRIX& viewM);
 
-		void DrawScene();
+		void DrawScene(bool b);
 		void DrawQuads();
 		void DrawRobot();
-		void DrawMetal();
+		void DrawMetal(bool b);
+		void DrawCircleOnMetal();
+		void DrawMirroredWorld();
 
-		//void inverse_kinematics(vector3 pos, vector3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);
+		vector3 GetPositionOnCircle(bool ifParticle);
+		void MoveSheldersMatrix();
+		void ReadKeyboard(bool isRotate);
+		void inverse_kinematics(vector3 pos, vector3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);
 	};
 }
 

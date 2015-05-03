@@ -18,12 +18,11 @@ namespace gk2
 		const XMMATRIX& getWorldMatrix() const { return m_worldMtx; }
 		void setWorldMatrix(const XMMATRIX& mtx) { m_worldMtx = mtx; }
 		void Render(const std::shared_ptr<ID3D11DeviceContext>& context);
-
+		void RenderCircle(const std::shared_ptr<ID3D11DeviceContext>& context);
+	
 		Mesh& operator =(const Mesh& right);
-
 		static void* operator new(size_t size);
-		static void operator delete(void* ptr);
-
+		static void operator delete(void* ptr);	
 	private:
 		std::shared_ptr<ID3D11Buffer> m_vertexBuffer;
 		std::shared_ptr<ID3D11Buffer> m_indexBuffer;

@@ -18,16 +18,18 @@ namespace gk2
 		float Size;
 		static const unsigned int LayoutElements = 4;
 		static const D3D11_INPUT_ELEMENT_DESC Layout[LayoutElements];
-
-		ParticleVertex() : Pos(0.0f, 0.0f, 0.0f), Age(0.0f), Angle(0.0f), Size(0.0f) { }
+		ParticleVertex() : Pos(0.0f, 0.0f, 0.0f),  Age(0.0f), Angle(0.0f), Size(0.0f) { }
 	};
 	
 	struct ParticleVelocities
 	{
+		float t;
 		XMFLOAT3 Velocity;
-		float AngleVelocity;
-
-		ParticleVelocities() : Velocity(0.0f, 0.0f, 0.0f), AngleVelocity(0.0f) { }
+		XMFLOAT3 StartVelocity;
+		XMFLOAT3 StartPos;
+		XMFLOAT3 PrevPos;
+		XMFLOAT3 StartDirection;
+		ParticleVelocities() : Velocity(0.0f, 0.0f, 0.0f), StartPos(0.0f, 0.0f, 0.0f), PrevPos(0.0f, 0.0f, 0.0f), StartDirection(0.0f, 0.0f, 0.0f) { }
 	};
 
 	struct Particle
@@ -54,11 +56,12 @@ namespace gk2
 
 		void SetViewMtxBuffer(const std::shared_ptr<gk2::CBMatrix>& view);
 		void SetProjMtxBuffer(const std::shared_ptr<gk2::CBMatrix>& proj);
-		void SetSamplerState(const std::shared_ptr<ID3D11SamplerState>& samplerState);
 
 		void Update(std::shared_ptr<ID3D11DeviceContext>& context, float dt, XMFLOAT4 cameraPos);
 		void Render(std::shared_ptr<ID3D11DeviceContext>& context);
-
+		static XMFLOAT3 m_startPosition;
+		static XMFLOAT3 m_startDirection;
+		XMFLOAT3 m_emitterPos;
 	private:
 		static const XMFLOAT3 EMITTER_DIR;	//mean direction of particles' velocity
 		static const float TIME_TO_LIVE;	//time of particle's life in seconds
@@ -75,7 +78,6 @@ namespace gk2
 		static const unsigned int OFFSET;
 		static const unsigned int STRIDE;
 
-		XMFLOAT3 m_emitterPos;
 		float m_particlesToCreate;
 		unsigned int m_particlesCount;
 		

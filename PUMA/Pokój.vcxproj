@@ -144,6 +144,7 @@
     <ClCompile Include="gk2_vertices.cpp" />
     <ClCompile Include="gk2_window.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mtxlib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gk2_applicationBase.h" />
@@ -165,22 +166,14 @@
     <ClInclude Include="gk2_utils.h" />
     <ClInclude Include="gk2_vertices.h" />
     <ClInclude Include="gk2_window.h" />
+    <ClInclude Include="mtxlib.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\meshes\chair_back.mesh" />
-    <None Include="resources\meshes\chair_seat.mesh" />
-    <None Include="resources\meshes\lamp.mesh" />
-    <None Include="resources\meshes\monitor.mesh" />
-    <None Include="resources\meshes\screen.mesh" />
-    <None Include="resources\meshes\teapot.mesh" />
     <None Include="resources\shaders\ColorTexShader.hlsl" />
     <None Include="resources\shaders\EnvMapShader.hlsl" />
     <None Include="resources\shaders\Particles.hlsl" />
     <None Include="resources\shaders\PhongShader.hlsl" />
     <None Include="resources\shaders\TextureShader.hlsl" />
-    <None Include="resources\textures\brick_wall.jpg" />
-    <None Include="resources\textures\lautrec_divan.jpg" />
-    <None Include="resources\textures\perlin.jpg" />
     <None Include="resources\textures\smoke.png" />
     <None Include="resources\textures\smokecolors.png" />
   </ItemGroup>

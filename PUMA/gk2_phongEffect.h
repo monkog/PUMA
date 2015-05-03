@@ -13,6 +13,7 @@ namespace gk2
 
 		void SetLightPosBuffer(const std::shared_ptr<gk2::ConstantBuffer<XMFLOAT4, 2>>& lightPos);
 		void SetSurfaceColorBuffer(const std::shared_ptr<gk2::ConstantBuffer<XMFLOAT4>>& surfaceColor);
+		//XMMATRIX UpdateLight(float dt, std::shared_ptr<ID3D11DeviceContext> context);
 
 	protected:
 		virtual void SetVertexShaderData();

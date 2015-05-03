@@ -11,7 +11,7 @@ namespace gk2
 	public:
 		Camera();
 
-		void Move(float x, float y);
+		void Move(float x, float y, float z);
 		void Rotate(float dx, float dy);
 		XMMATRIX GetViewMatrix();
 		void GetViewMatrix(XMMATRIX& viewMatrix);
@@ -20,9 +20,10 @@ namespace gk2
 	private:
 		float m_angleX;
 		float m_angleY;
-		float m_distance;
-		float m_xPos;
-		float m_yPos;
+		XMVECTOR m_upVector;
+		XMVECTOR m_focusPosition; 
+		XMVECTOR m_position;
+		XMVECTOR m_lastCam;
 	};
 }
 

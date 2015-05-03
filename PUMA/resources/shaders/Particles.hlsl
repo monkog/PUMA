@@ -33,6 +33,7 @@ struct PSInput
 	float4 pos : SV_POSITION;
 	float2 tex1: TEXCOORD0;
 	float2 tex2: TEXCOORD1;
+	float age : TEXCOORD2;
 };
 
 static const float TimeToLive = 4.0f;
@@ -58,16 +59,7 @@ void GS_Main(point GSInput inArray[1], inout TriangleStream<PSInput> ostream)
 	float dy = (cosa + sina) * 0.5 * i.size;
 	float tex2x = i.age / TimeToLive;
 	PSInput o = (PSInput)0;
-
-	//TODO: Initialize o for 4 vertices to make a bilboard and append them to the ostream
-
-	// Right up corner
-	o = (PSInput)0;
-	o.pos = float4(i.pos.x + dx, i.pos.y + dy, i.pos.z, 1.0);
-	o.pos = mul(projMatrix, o.pos);
-	o.tex1 = float2(1, 0);
-	o.tex2 = float2(tex2x, 0.5f);
-	ostream.Append(o);
+	o.age = i.age / TimeToLive;
 
 	// Left down corner
 	o = (PSInput)0;
@@ -93,14 +85,23 @@ void GS_Main(point GSInput inArray[1], inout TriangleStream<PSInput> ostream)
 	o.tex2 = float2(tex2x, 0.5f);
 	ostream.Append(o);
 
+	// Right up corner
+	o = (PSInput)0;
+	o.pos = float4(i.pos.x + dx, i.pos.y + dy, i.pos.z, 1.0);
+	o.pos = mul(projMatrix, o.pos);
+	o.tex1 = float2(1, 0);
+	o.tex2 = float2(tex2x, 0.5f);
+	ostream.Append(o);
+
 	ostream.RestartStrip();
 }
 
 float4 PS_Main(PSInput i) : SV_TARGET
 {
+	float a =1- i.age / TimeToLive;
 	float4 color = cloudMap.Sample(colorSampler, i.tex1);
 	float4 opacity = opacityMap.Sample(colorSampler, i.tex2);
-	float alpha = color.a * opacity.a * 0.3f;
+	float alpha = color.a * opacity.a * 0.1f*a;
 	if (alpha == 0.0f)
 		discard;
 	return float4(color.xyz, alpha);
